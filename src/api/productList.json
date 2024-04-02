@@ -1,58 +1,58 @@
 [
   {
     "count": 4,
-    "description": "[MOCK] Short Product Description1",
+    "description": "Baldur's Gate 3 is a 2023 role-playing video game developed and published by Belgian game developer Larian Studios.",
     "id": "7567ec4b-b10c-48c5-9345-fc73c48a80aa",
-    "price": 2.4,
-    "title": "[MOCK] ProductOne"
+    "price": 40,
+    "title": "Baldur's Gate 3"
   },
   {
     "count": 6,
-    "description": "Short Product Description3",
+    "description": "Elden Ring is a 2022 action role-playing game developed by FromSoftware.",
     "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a0",
-    "price": 10,
-    "title": "[MOCK] ProductNew"
+    "price": 60,
+    "title": "Elden Ring"
   },
   {
     "count": 7,
-    "description": "[MOCK] Short Product Description2",
+    "description": "Final Fantasy VII Rebirth is a 2024 action role-playing game developed and published by Square Enix.",
     "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a2",
-    "price": 23,
-    "title": "[MOCK] ProductTop"
+    "price": 70,
+    "title": "Final Fantasy VII Rebirth"
   },
   {
     "count": 12,
-    "description": "[MOCK] Short Product Description7",
+    "description": "Overwatch was a 2016 team-based multiplayer first-person shooter game by Blizzard Entertainment. ",
     "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a1",
-    "price": 15,
-    "title": "[MOCK] ProductTitle"
+    "price": 70,
+    "title": "Overwatch"
   },
   {
     "count": 7,
-    "description": "[MOCK] Short Product Description2",
+    "description": "Red Dead Redemption is a 2010 action-adventure game developed by Rockstar San Diego",
     "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a3",
-    "price": 23,
-    "title": "[MOCK] Product"
+    "price": 70,
+    "title": "Red Dead Redemption"
   },
   {
     "count": 8,
-    "description": "[MOCK] Short Product Description4",
+    "description": "Stardew Valley is a 2016 farm life sim video game developed by Eric",
     "id": "7567ec4b-b10c-48c5-9345-fc73348a80a1",
-    "price": 15,
-    "title": "[MOCK] ProductTest"
+    "price": 30,
+    "title": "Stardew Valley"
   },
   {
     "count": 2,
-    "description": "[MOCK] Short Product Descriptio1",
+    "description": "Star Fox, known as Starwing in PAL regions, is a rail shooter video game developed by Nintendo and Argonaut Software",
     "id": "7567ec4b-b10c-48c5-9445-fc73c48a80a2",
     "price": 23,
-    "title": "[MOCK] Product2"
+    "title": "Star Fox"
   },
   {
     "count": 3,
-    "description": "[MOCK] Short Product Description7",
+    "description": "Terraria is a 2011 action-adventure sandbox game developed by Re-Logic. ",
     "id": "7567ec4b-b10c-45c5-9345-fc73c48a80a1",
     "price": 15,
-    "title": "[MOCK] ProductName"
+    "title": "Terraria"
   }
 ]
