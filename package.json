@@ -4,6 +4,7 @@
   "private": true,
   "author": "JSCC",
   "scripts": {
+    "build-and-deploy": "sh ./build.sh && sh ./deploy.sh ",
     "serve": "cross-env NODE_ENV=development vue-cli-service serve --port 5555 --host localhost",
     "build": "vue-cli-service build --dest build",
     "build:version": "npm version patch && npm run build",

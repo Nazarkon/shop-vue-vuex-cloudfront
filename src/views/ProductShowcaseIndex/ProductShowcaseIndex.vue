@@ -1,6 +1,7 @@
 <template>
 	<div class="grey lighten-5">
 		<v-container>
+			<div class="text-center text-9xl my-5">Deployed with AWS CDK</div>
 			<v-row>
 				<v-col
 					xs="12"

@@ -1,5 +1,20 @@
 # shop-vue-vuex-cloudfront
 
+## Task 2.2
+
+*Created CDK setup to build app stack with*
+### CloudFront Link
+
+```
+https://d21zlkjp7q6xfj.cloudfront.net/
+```
+
+### S3 Bucket that connected to CloudFront above
+
+```
+http://mygameshopstack-sitebucket397a1860-srtyzupbt0qg.s3-website-us-east-1.amazonaws.com/
+```
+
 See `develop` branch for development
 
 ## Project setup
