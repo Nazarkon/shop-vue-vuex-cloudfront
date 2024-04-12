@@ -1,4 +1,3 @@
-// Filename: hello-lambda-stack.ts
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as cdk from 'aws-cdk-lib';
@@ -41,9 +40,7 @@ export class ProductDataLambdaStack extends cdk.Stack {
 		const getProductDataByIdLambdaIntegration =
 			new apigateway.LambdaIntegration(getProductDataByIdLambda, {});
 
-		// Create a resource /hello and GET request under it
 		const getProductDataResource = api.root.addResource('product');
-		// On this resource attach a GET method which pass reuest to our Lambda function
 		getProductDataResource.addMethod('GET', ProductDataLambdasIntegration);
 
 		const getProductByIdResource =
