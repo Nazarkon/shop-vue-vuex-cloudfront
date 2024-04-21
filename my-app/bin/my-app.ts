@@ -2,7 +2,7 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { MyGameShopStack } from '../lib/my-app-stack';
-import { ProductDataLambdaStack } from '../lib/productsLambda/product-lambda-stack';
+// import { ProductDataLambdaStack } from '../lib/productsLambda/product-lambda-stack';
 import { ProductServiceStack } from '../lib/product-service/ProductServiceStack';
 
 const app = new cdk.App();
@@ -22,5 +22,5 @@ new MyGameShopStack(app, 'MyGameShopStack', {
 	// env: { account: '123456789012', region: 'us-east-1' },
 	/* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
-new ProductDataLambdaStack(app, 'ProductDataLambdaStack', {});
+// new ProductDataLambdaStack(app, 'ProductDataLambdaStack', {});
 new ProductServiceStack(app, 'ProductServiceStack', {});
