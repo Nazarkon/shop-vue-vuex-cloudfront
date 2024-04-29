@@ -6,7 +6,6 @@
 			</h5>
 
 			<v-csv-file-uploader :url="uploaderS3Url"></v-csv-file-uploader>
-
 			<v-csv-product-table
 				:products="products"
 				:isLoading="isFetching"
@@ -36,7 +35,7 @@ export default Vue.extend({
 			products: [] as Product[],
 			isFetching: false,
 
-			uploaderS3Url: `${API_PATHS.import}/import`,
+			uploaderS3Url: `${API_PATHS.import}/upload`,
 		};
 	},
 	created() {

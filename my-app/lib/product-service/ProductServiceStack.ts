@@ -6,6 +6,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as cdk from 'aws-cdk-lib';
 import * as path from 'path';
+import { Cors } from 'aws-cdk-lib/aws-apigateway';
 
 const productTableName = process.env.PRODUCT_TABLE_DB_NAME;
 const stockTableName = process.env.PRODUCT_TABLE_DB_STOCK_NAME;
@@ -84,6 +85,11 @@ export class ProductServiceStack extends Stack {
 			restApiName: 'Api Gateway for products',
 			description:
 				'This API serves the Lambda functions. Which are responsible for products returning',
+			defaultCorsPreflightOptions: {
+				allowOrigins: ['http://localhost:5555'],
+				allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+				allowHeaders: Cors.DEFAULT_HEADERS,
+			},
 		});
 
 		const ProductDataLambdasIntegration = new apigateway.LambdaIntegration(
