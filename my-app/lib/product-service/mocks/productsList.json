@@ -1,0 +1,28 @@
+[
+    {
+      "description": "Baldur's Gate 3 is a 2023 role-playing video game developed and published by Belgian game developer Larian Studios.",
+      "price": 40,
+      "title": "Baldur's Gate 3"
+    },
+    {
+      "description": "Elden Ring is a 2022 action role-playing game developed by FromSoftware.",
+      "price": 60,
+      "title": "Elden Ring"
+    },
+    {
+      "description": "Final Fantasy VII Rebirth is a 2024 action role-playing game developed and published by Square Enix.",
+      "price": 70,
+      "title": "Final Fantasy VII Rebirth"
+    },
+    {
+      "description": "Overwatch was a 2016 team-based multiplayer first-person shooter game by Blizzard Entertainment. ",
+      "price": 70,
+      "title": "Overwatch"
+    },
+    {
+      "description": "Red Dead Redemption is a 2010 action-adventure game developed by Rockstar San Diego",
+      "price": 70,
+      "title": "Red Dead Redemption"
+    }
+  ]
+  
