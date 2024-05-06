@@ -54,7 +54,7 @@ const fetchPresignedS3Url = (url: string, fileName: string) => {
 		method: 'GET',
 		url,
 		params: {
-			name: encodeURIComponent(fileName),
+			fileName: encodeURIComponent(fileName),
 		},
 	});
 };

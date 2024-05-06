@@ -15,8 +15,15 @@ interface RequestBodyParams {
 export async function createProductHandler(event: RequestBodyParams) {
 	const { title, description, price, count } = JSON.parse(event.body);
 
+	const metaData = {
+		headers: {
+			'Access-Control-Allow-Origin': 'http://localhost:3000',
+		},
+	};
+
 	if (!title || !description || !price || !count) {
 		return {
+			...metaData,
 			statusCode: 400,
 			body: JSON.stringify({
 				message: 'Product was not created. Some fields are missing',
@@ -57,6 +64,7 @@ export async function createProductHandler(event: RequestBodyParams) {
 		await docClient.send(putStockCommand);
 	} catch (error) {
 		return {
+			...metaData,
 			statusCode: 500,
 			body: JSON.stringify({
 				message: 'Failed to add a product to Stock Table',
@@ -65,6 +73,7 @@ export async function createProductHandler(event: RequestBodyParams) {
 	}
 
 	return {
+		...metaData,
 		statusCode: 201,
 		body: JSON.stringify({
 			message: 'Product successfully created',

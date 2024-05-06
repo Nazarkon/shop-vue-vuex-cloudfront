@@ -1,0 +1,17 @@
+{
+  "name": "importproductfile",
+  "version": "1.0.0",
+  "description": "\"Resposible for creating Singned URL\"",
+  "main": "importProductFile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nazar M",
+  "license": "ISC",
+  "types": "./importProductFile.d.ts",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.563.0",
+    "@aws-sdk/s3-request-presigner": "^3.563.0",
+    "dotenv": "^16.4.5"
+  }
+}

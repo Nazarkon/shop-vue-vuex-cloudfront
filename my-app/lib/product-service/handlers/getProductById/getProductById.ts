@@ -14,6 +14,11 @@ interface RequestQueryParams {
 }
 
 export async function getProductByIdHandler(event: RequestQueryParams) {
+	const metaData = {
+		headers: {
+			'Access-Control-Allow-Origin': 'http://localhost:3000',
+		},
+	};
 	if (!event.pathParameters.product_id) {
 		console.log(event.pathParameters.product_id, 'Event');
 		return {
@@ -55,6 +60,7 @@ export async function getProductByIdHandler(event: RequestQueryParams) {
 
 		if (!productData) {
 			return {
+				...metaData,
 				statusCode: 404,
 				body: JSON.stringify({ message: 'Product not found' }),
 				headers: {
@@ -64,6 +70,7 @@ export async function getProductByIdHandler(event: RequestQueryParams) {
 		}
 
 		return {
+			...metaData,
 			statusCode: 200,
 			body: JSON.stringify(mergedResponse),
 			headers: {
@@ -72,6 +79,7 @@ export async function getProductByIdHandler(event: RequestQueryParams) {
 		};
 	} catch (error) {
 		return {
+			...metaData,
 			statusCode: 500,
 			body: JSON.stringify({ message: 'Error occurred', error }),
 			headers: {

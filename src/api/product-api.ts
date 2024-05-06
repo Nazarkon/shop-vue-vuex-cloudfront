@@ -18,7 +18,7 @@ const fetchAvailableProducts = async (): Promise<Product[]> => {
 
 const fetchProducts = async (): Promise<Product[]> => {
 	return axios
-		.get(`${API_PATHS.bff}/product`)
+		.get(`${API_PATHS.bff}/products`)
 		.then(res => res.data)
 		.catch(e => {
 			console.error(e);
@@ -40,9 +40,13 @@ const deleteProductById = (id: string) => {
 };
 
 const saveProduct = (productToSave: Product) => {
-	console.info(`PUT saveProduct: ${JSON.stringify(productToSave)}`);
+	console.info(`POST saveProduct: ${JSON.stringify(productToSave)}`);
 
-	return axios.put(`${API_PATHS.bff}/product`, productToSave);
+	return axios.post(`${API_PATHS.bff}/products`, productToSave, {
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
 };
 
 export const productApi = {
