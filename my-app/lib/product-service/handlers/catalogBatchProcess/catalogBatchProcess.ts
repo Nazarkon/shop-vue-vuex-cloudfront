@@ -1,3 +1,4 @@
+import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 import { SQSEvent } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
@@ -5,6 +6,8 @@ import { uuid } from 'uuidv4';
 
 const client = new DynamoDBClient({ region: process.env.REGION });
 const docClient = DynamoDBDocumentClient.from(client);
+
+const snsClient = new SNSClient({ region: process.env.REGION });
 
 const productTableName = process.env.STACK_PRODUCT_DB_NAME;
 const stockTableName = process.env.STACK_PRODUCT_STOCK_DB_NAME;
@@ -33,6 +36,19 @@ async function createProductRecords(data: ProductData[]) {
 			try {
 				await docClient.send(putProductCommand);
 				console.log(`Product with id ${productId} added successfully`);
+
+				await snsClient.send(
+					new PublishCommand({
+						TopicArn: process.env.SNS_ARN,
+						Message: `New product created: ${JSON.stringify({
+							id: productId,
+							title,
+							description,
+							price,
+						})}`,
+						Subject: 'New Product Creation Notification',
+					})
+				);
 			} catch (err) {
 				console.log(`Error adding product with id ${productId}: ${err}`);
 			}

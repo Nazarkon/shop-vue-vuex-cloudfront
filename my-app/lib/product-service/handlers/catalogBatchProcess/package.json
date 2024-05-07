@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-sns": "^3.569.0",
     "@types/aws-lambda": "^8.10.137",
     "aws-lambda": "^1.0.7",
     "uuidv4": "^6.2.13"

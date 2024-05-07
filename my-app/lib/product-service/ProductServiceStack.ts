@@ -9,7 +9,7 @@ import * as path from 'path';
 import { Cors } from 'aws-cdk-lib/aws-apigateway';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
-import { SnsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
+import * as subs from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as sns from 'aws-cdk-lib/aws-sns';
 
 const productTableName = process.env.PRODUCT_TABLE_DB_NAME;
@@ -23,6 +23,10 @@ export class ProductServiceStack extends Stack {
 			visibilityTimeout: cdk.Duration.seconds(300),
 		});
 		const productTopic = new sns.Topic(this, 'product-topic');
+
+		productTopic.addSubscription(
+			new subs.EmailSubscription(process.env.PERSONAL_EMAIL || '')
+		);
 
 		const ProductTable = new dynamodb.Table(this, 'Products', {
 			tableName: productTableName,
@@ -57,6 +61,8 @@ export class ProductServiceStack extends Stack {
 			}
 		);
 
+		productTopic.grantPublish(catalogBatchProcessLambda);
+
 		ProductTable.grantWriteData(catalogBatchProcessLambda);
 		StockTable.grantWriteData(catalogBatchProcessLambda);
 
@@ -67,22 +73,6 @@ export class ProductServiceStack extends Stack {
 			})
 		);
 		productSqs.grantConsumeMessages(catalogBatchProcessLambda);
-
-		const createProductTopicLambda = new lambda.Function(
-			this,
-			'createProductTopic',
-			{
-				runtime: lambda.Runtime.NODEJS_20_X,
-				memorySize: 1024,
-				timeout: cdk.Duration.seconds(5),
-				handler: 'createProductTopic.createProductTopicHandler',
-				code: lambda.Code.fromAsset(
-					path.join(__dirname, './handlers/createProductTopic')
-				),
-			}
-		);
-
-		createProductTopicLambda.addEventSource(new SnsEventSource(productTopic));
 
 		const getProductDataLambda = new lambda.Function(this, 'getProductData', {
 			runtime: lambda.Runtime.NODEJS_20_X,
