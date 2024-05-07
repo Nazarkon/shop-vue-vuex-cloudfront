@@ -25,7 +25,25 @@ export class ProductServiceStack extends Stack {
 		const productTopic = new sns.Topic(this, 'product-topic');
 
 		productTopic.addSubscription(
-			new subs.EmailSubscription(process.env.PERSONAL_EMAIL || '')
+			new subs.EmailSubscription(process.env.PERSONAL_EMAIL || '', {
+				filterPolicy: {
+					// send this product to main email if price lower 30
+					price: sns.SubscriptionFilter.numericFilter({
+						lessThan: 30,
+					}),
+				},
+			})
+		);
+
+		productTopic.addSubscription(
+			new subs.EmailSubscription(process.env.SECONDARY_EMAIL || '', {
+				filterPolicy: {
+					// send this product to main email if price greaterThan 30
+					price: sns.SubscriptionFilter.numericFilter({
+						greaterThan: 30,
+					}),
+				},
+			})
 		);
 
 		const ProductTable = new dynamodb.Table(this, 'Products', {

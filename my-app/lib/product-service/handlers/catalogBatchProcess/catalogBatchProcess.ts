@@ -36,19 +36,6 @@ async function createProductRecords(data: ProductData[]) {
 			try {
 				await docClient.send(putProductCommand);
 				console.log(`Product with id ${productId} added successfully`);
-
-				await snsClient.send(
-					new PublishCommand({
-						TopicArn: process.env.SNS_ARN,
-						Message: `New product created: ${JSON.stringify({
-							id: productId,
-							title,
-							description,
-							price,
-						})}`,
-						Subject: 'New Product Creation Notification',
-					})
-				);
 			} catch (err) {
 				console.log(`Error adding product with id ${productId}: ${err}`);
 			}
@@ -67,6 +54,30 @@ async function createProductRecords(data: ProductData[]) {
 			} catch (err) {
 				console.log(`Error adding stock for product id ${productId}: ${err}`);
 			}
+
+			try {
+				await snsClient.send(
+					new PublishCommand({
+						TopicArn: process.env.SNS_ARN,
+						Message: `New product created: ${JSON.stringify({
+							id: productId,
+							title,
+							description,
+							price,
+						})}`,
+						MessageAttributes: {
+							price: {
+								DataType: 'Number',
+								StringValue: price.toString(),
+							},
+						},
+						Subject: 'New Product Creation Notification',
+					})
+				);
+				console.log('SNS was successfully send');
+			} catch (err) {
+				console.log(err, 'SNS ERROR');
+			}
 		}
 	);
 
@@ -83,6 +94,6 @@ export async function catalogBatchProcessHandler(event: SQSEvent) {
 		await createProductRecords(records);
 		console.log('SNS messages with products were successfully saved');
 	} catch (err) {
-		console.log('Smth went wrong');
+		console.log(err, 'Smth went wrong');
 	}
 }
