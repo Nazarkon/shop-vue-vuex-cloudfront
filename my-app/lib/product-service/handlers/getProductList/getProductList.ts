@@ -39,7 +39,6 @@ export async function getProductHandler() {
 		};
 	} catch (error) {
 		return {
-			...metaData,
 			statusCode: 500,
 			body: JSON.stringify({
 				message: 'Error occurred while getting products list',
