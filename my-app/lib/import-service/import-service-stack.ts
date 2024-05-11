@@ -7,10 +7,18 @@ import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('node:path');
+import * as sqs from 'aws-cdk-lib/aws-sqs';
+import 'dotenv/config';
 
 export class ImportServiceStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
+
+		const productSQS = sqs.Queue.fromQueueArn(
+			this,
+			'catalogItemsQueue',
+			process.env.SQS_QUEUE_ARN || ''
+		);
 
 		const bucket = new s3.Bucket(this, 'ImportProductServiceBucket', {
 			bucketName: 'import-product-service-bucket',
@@ -50,6 +58,7 @@ export class ImportServiceStack extends cdk.Stack {
 				path.join(__dirname, './lambda-handlers/importFileParser')
 			),
 		});
+		productSQS.grantSendMessages(getParsedFileLambda);
 		// Set rights to perform delete and Copy operation
 		bucket.grantRead(getParsedFileLambda);
 		bucket.grantDelete(getParsedFileLambda);

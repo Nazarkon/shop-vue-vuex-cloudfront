@@ -1,0 +1,18 @@
+{
+  "name": "catalogbatchprocess",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-sns": "^3.569.0",
+    "@types/aws-lambda": "^8.10.137",
+    "aws-lambda": "^1.0.7",
+    "uuidv4": "^6.2.13"
+  }
+}

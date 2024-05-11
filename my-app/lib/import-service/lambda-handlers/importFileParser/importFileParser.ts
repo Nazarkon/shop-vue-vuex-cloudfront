@@ -7,10 +7,14 @@ import {
 import csvParser from 'csv-parser';
 import { promisify } from 'util';
 import { pipeline, Writable, Readable } from 'stream';
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 
 const promisifiedPipeline = promisify(pipeline);
 
 const client = new S3Client({ region: 'us-east-1' });
+
+const sqsClient = new SQSClient({ region: 'us-east-1' });
+const sqsQueueUrl = process.env.SQS_QUEUE_URL; // replace with your queue URL
 
 async function moveCSVFile(
 	bucketName: string,
@@ -59,8 +63,20 @@ const processCSVFile = async (bucket: string, objKey: string) => {
 				csvParser(),
 				new Writable({
 					objectMode: true,
-					write(chunk, encoding, callback) {
-						callback();
+					write: async (chunk, encoding, callback) => {
+						try {
+							await sqsClient.send(
+								new SendMessageCommand({
+									QueueUrl: sqsQueueUrl,
+									MessageBody: JSON.stringify(chunk),
+								})
+							);
+							console.log('Message to SQS successfully send');
+							callback();
+						} catch (error) {
+							console.log(error);
+							callback();
+						}
 					},
 				})
 			);
