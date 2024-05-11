@@ -139,6 +139,19 @@ export class ProductServiceStack extends Stack {
 		ProductTable.grantWriteData(postProductDataLambda);
 		StockTable.grantWriteData(postProductDataLambda);
 
+		const basicAuthorizerLambda = new lambda.Function(this, 'basicAuthorizer', {
+			runtime: lambda.Runtime.NODEJS_20_X,
+			memorySize: 1024,
+			timeout: cdk.Duration.seconds(5),
+			handler: 'basicAuthorizer.basicAuthorizerHandler',
+			code: lambda.Code.fromAsset(
+				path.join(
+					__dirname,
+					'../authorization-service/handlers/basicAuthorizer'
+				)
+			),
+		});
+
 		const api = new apigateway.RestApi(this, 'product-data-api', {
 			restApiName: 'Api Gateway for products',
 			description:
@@ -174,5 +187,14 @@ export class ProductServiceStack extends Stack {
 		);
 
 		getProductDataResource.addMethod('POST', postProductDataLambdaIntegration);
+
+		const basicAuthorizerLambdaIntegration = new apigateway.LambdaIntegration(
+			basicAuthorizerLambda,
+			{}
+		);
+
+		const basicAuthorizerResource = api.root.addResource('login');
+
+		basicAuthorizerResource.addMethod('GET', basicAuthorizerLambdaIntegration)
 	}
 }
