@@ -1,6 +1,7 @@
+import base64 from 'base-64';
 interface Event {
 	methodArn: string;
-	headers: { username: string; password: string };
+	headers: { username: string; password: string; Authorization: string };
 }
 
 interface AuthResponse {
@@ -32,26 +33,35 @@ export const importServiceAuthorizerHandler = (
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	callback: Function
 ) => {
-	console.log('Received event:', JSON.stringify(event, null, 2));
-	const headers = event.headers;
-
 	const tmp = event.methodArn.split(':');
 	const apiGatewayArnTmp = tmp[5].split('/');
 	const resource = apiGatewayArnTmp[3] ? `${apiGatewayArnTmp[3]}` : '/';
-
-	if (!headers.username || !headers.password) {
-		callback(
-			null,
-			generateAllow('Authorization header is not provided', event.methodArn)
-		);
-	}
-
-	const savedPassword = process.env[headers.username.trim()];
-
-	if (savedPassword === headers.password.trim()) {
-		callback(null, generateAllow('Access is granted', event.methodArn));
+	// If Authorization presented then we check the token in other case username and password
+	if (event.headers.Authorization) {
+		const endocdedData = base64.encode('NAZARKON:TEST_PASSWORD');
+		if (event.headers.Authorization === endocdedData) {
+			callback(null, generateAllow('Access is granted', event.methodArn));
+		} else {
+			callback(null, generateDeny(`Unauthorized`, resource));
+		}
 	} else {
-		callback(null, generateDeny('Unauthorized', resource));
+		console.log('Received event:', JSON.stringify(event, null, 2));
+		const headers = event.headers;
+
+		if (!headers.username || !headers.password) {
+			callback(
+				null,
+				generateAllow('Authorization header is not provided', event.methodArn)
+			);
+		}
+
+		const savedPassword = process.env[headers.username.trim()];
+
+		if (savedPassword === headers.password.trim()) {
+			callback(null, generateAllow('Access is granted', event.methodArn));
+		} else {
+			callback(null, generateDeny('Unauthorized', resource));
+		}
 	}
 };
 

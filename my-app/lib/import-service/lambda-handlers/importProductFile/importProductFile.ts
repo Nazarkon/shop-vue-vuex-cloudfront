@@ -26,6 +26,10 @@ export async function importProductSignedURLHandler(event: any) {
 			body: JSON.stringify({ url: signedURL }),
 			headers: {
 				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': '*', // Update this with your specific origin when deploying
+				'Access-Control-Allow-Credentials': true,
+				'Access-Control-Allow-Headers':
+					'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,password,username', // Add 'password' to the allowed headers
 			},
 		};
 	} catch (error) {
@@ -34,6 +38,13 @@ export async function importProductSignedURLHandler(event: any) {
 			body: JSON.stringify({
 				message: 'Failed to create S3 SignedURL',
 			}),
+			headers: {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': '*', // Update this with your specific origin when deploying
+				'Access-Control-Allow-Credentials': true,
+				'Access-Control-Allow-Headers':
+					'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,password,username', // Add 'password' to the allowed headers
+			},
 		};
 	}
 }
