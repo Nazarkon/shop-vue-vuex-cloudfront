@@ -49,6 +49,32 @@ export class ImportServiceStack extends cdk.Stack {
 			}
 		);
 
+		const importServiceAuthLambda = new lambda.Function(
+			this,
+			'importServiceAuth',
+			{
+				runtime: lambda.Runtime.NODEJS_20_X,
+				memorySize: 1024,
+				timeout: cdk.Duration.seconds(5),
+				handler: 'importServiceAuthorizer.importServiceAuthorizerHandler',
+				code: lambda.Code.fromAsset(
+					path.join(__dirname, './lambda-handlers/importServiceAuthorizer')
+				),
+			}
+		);
+		const importServiceAuth = new apigateway.RequestAuthorizer(
+			this,
+			'RequestAuthorizer',
+			{
+				handler: importServiceAuthLambda,
+				identitySources: [
+					apigateway.IdentitySource.header('username'),
+					apigateway.IdentitySource.header('password'),
+				],
+				resultsCacheTtl: cdk.Duration.minutes(0),
+			}
+		);
+
 		const getParsedFileLambda = new lambda.Function(this, 'importFileParser', {
 			runtime: lambda.Runtime.NODEJS_20_X,
 			memorySize: 1024,
@@ -93,6 +119,8 @@ export class ImportServiceStack extends cdk.Stack {
 		const getSignedUrlResource =
 			S3BucketApiGateWay.root.addResource('{fileName}');
 
-		getSignedUrlResource.addMethod('GET', productGetFileSignedURL);
+		getSignedUrlResource.addMethod('GET', productGetFileSignedURL, {
+			authorizer: importServiceAuth,
+		});
 	}
 }
