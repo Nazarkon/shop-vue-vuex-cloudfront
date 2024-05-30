@@ -3,6 +3,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
+import { Cors } from 'aws-cdk-lib/aws-apigateway';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -49,6 +50,45 @@ export class ImportServiceStack extends cdk.Stack {
 			}
 		);
 
+		const importServiceAuthLambda = new lambda.Function(
+			this,
+			'importServiceAuth',
+			{
+				runtime: lambda.Runtime.NODEJS_20_X,
+				memorySize: 1024,
+				timeout: cdk.Duration.seconds(5),
+				handler: 'importServiceAuthorizer.importServiceAuthorizerHandler',
+				code: lambda.Code.fromAsset(
+					path.join(__dirname, './lambda-handlers/importServiceAuthorizer')
+				),
+			}
+		);
+
+		// Was used for ticket 7.2
+		// const importServiceAuth = new apigateway.RequestAuthorizer(
+		// 	this,
+		// 	'RequestAuthorizer',
+		// 	{
+		// 		handler: importServiceAuthLambda,
+		// 		identitySources: [
+		// 			apigateway.IdentitySource.header('username'),
+		// 			apigateway.IdentitySource.header('password'),
+		// 		],
+		// 		resultsCacheTtl: cdk.Duration.minutes(0),
+		// 	}
+		// );
+
+		// Currently used for 7.3
+		const importServiceAuth = new apigateway.RequestAuthorizer(
+			this,
+			'RequestAuthorizer',
+			{
+				handler: importServiceAuthLambda,
+				identitySources: [apigateway.IdentitySource.header('Authorization')],
+				resultsCacheTtl: cdk.Duration.minutes(0),
+			}
+		);
+
 		const getParsedFileLambda = new lambda.Function(this, 'importFileParser', {
 			runtime: lambda.Runtime.NODEJS_20_X,
 			memorySize: 1024,
@@ -82,6 +122,19 @@ export class ImportServiceStack extends cdk.Stack {
 				restApiName: 'API Geteway for S3 Bucket',
 				description:
 					'This API serves the Lambda function that a resposible for uploading and retriving data ',
+				defaultCorsPreflightOptions: {
+					allowOrigins: apigateway.Cors.ALL_ORIGINS, // Or specify allowed origins like ['http://localhost:3000']
+					allowMethods: apigateway.Cors.ALL_METHODS, // Or specify allowed methods like ['GET', 'POST']
+					allowHeaders: [
+						'Content-Type',
+						'X-Amz-Date',
+						'Authorization',
+						'X-Api-Key',
+						'X-Amz-Security-Token',
+						'password',
+						'username',
+					],
+				},
 			}
 		);
 
@@ -93,6 +146,8 @@ export class ImportServiceStack extends cdk.Stack {
 		const getSignedUrlResource =
 			S3BucketApiGateWay.root.addResource('{fileName}');
 
-		getSignedUrlResource.addMethod('GET', productGetFileSignedURL);
+		getSignedUrlResource.addMethod('GET', productGetFileSignedURL, {
+			authorizer: importServiceAuth,
+		});
 	}
 }

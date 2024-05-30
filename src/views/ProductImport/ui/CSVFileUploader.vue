@@ -56,6 +56,9 @@ const fetchPresignedS3Url = (url: string, fileName: string) => {
 		params: {
 			fileName: encodeURIComponent(fileName),
 		},
+		headers: {
+			Authorization: btoa(localStorage.getItem('authorization_token') || ''),
+		},
 	});
 };
 
