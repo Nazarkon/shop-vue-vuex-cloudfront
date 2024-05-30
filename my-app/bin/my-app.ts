@@ -5,6 +5,7 @@ import { MyGameShopStack } from '../lib/my-app-stack';
 // import { ProductDataLambdaStack } from '../lib/productsLambda/product-lambda-stack';
 import { ProductServiceStack } from '../lib/product-service/ProductServiceStack';
 import { ImportServiceStack } from '../lib/import-service/import-service-stack';
+import { RDSServiceStack } from '../lib/rds-service/rds-amazon-service';
 
 const app = new cdk.App();
 new MyGameShopStack(app, 'MyGameShopStack', {
@@ -26,3 +27,4 @@ new MyGameShopStack(app, 'MyGameShopStack', {
 // new ProductDataLambdaStack(app, 'ProductDataLambdaStack', {});
 new ProductServiceStack(app, 'ProductServiceStack', {});
 new ImportServiceStack(app, 'ImportServiceStack', {});
+new RDSServiceStack(app, 'RDSServiceStack', {});
